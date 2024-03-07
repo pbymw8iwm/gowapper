@@ -361,8 +361,8 @@ func (client *RedisClusterClient) TTL(key string) (err error, ttl time.Duration)
 	return
 }
 
-func (client *RedisClusterClient) Close() {
-	client.RedisClient.Close()
+func (client *RedisClusterClient) Close() error {
+	return client.RedisClient.Close()
 }
 
 func (client *RedisClusterClient) GetServerPing() error {

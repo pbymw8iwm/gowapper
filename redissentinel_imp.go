@@ -357,8 +357,8 @@ func (client *RedisSentinelClient) TTL(key string) (err error, ttl time.Duration
 	return
 }
 
-func (client *RedisSentinelClient) Close() {
-	client.RedisClient.Close()
+func (client *RedisSentinelClient) Close() error {
+	return client.RedisClient.Close()
 }
 
 func (client *RedisSentinelClient) GetServerPing() error {
