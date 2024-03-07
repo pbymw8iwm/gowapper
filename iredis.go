@@ -1,4 +1,4 @@
-package databasewapper
+package gowapper
 
 import (
 	"time"
