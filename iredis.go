@@ -7,7 +7,7 @@ import (
 )
 
 // IRedisConnection 是 Redis 连接的抽象接口
-type IRedisConnection interface {
+type IRedisClient interface {
 	Connect(mastername, password string, addrs []string, db int) error
 
 	Set(key string, value string, duration time.Duration) (err error)
