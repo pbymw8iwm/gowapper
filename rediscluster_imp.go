@@ -375,3 +375,7 @@ func (client *RedisClusterClient) GetServerPing() error {
 	}
 	return nil
 }
+
+func (client *RedisClusterClient) Subscribe(channels ...string) *redis.PubSub {
+	return client.RedisClient.Subscribe(context.Background(), channels...)
+}

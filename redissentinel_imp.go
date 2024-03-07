@@ -371,3 +371,6 @@ func (client *RedisSentinelClient) GetServerPing() error {
 	}
 	return nil
 }
+func (client *RedisSentinelClient) Subscribe(channels ...string) *redis.PubSub {
+	return client.RedisClient.Subscribe(context.Background(), channels...)
+}
