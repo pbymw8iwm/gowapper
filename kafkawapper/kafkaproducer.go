@@ -5,7 +5,7 @@ import (
 
 	"github.com/IBM/sarama"
 	"github.com/astaxie/beego"
-	cluster "github.com/bsm/sarama-cluster"
+	//cluster "github.com/bsm/sarama-cluster"
 )
 
 type KafkaProducerProxy struct {
