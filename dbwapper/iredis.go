@@ -1,4 +1,4 @@
-package gowapper
+package dbwapper
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 
 // IRedisConnection 是 Redis 连接的抽象接口
 type IRedisClient interface {
-	Connect(mastername, password string, addrs []string, db int) error
+	Connect(param *RedisCacheParam) error
 
 	Set(key string, value string, duration time.Duration) (err error)
 	Get(key string) (result string, err error)
@@ -83,4 +83,5 @@ type IRedisClient interface {
 	GetServerPing() error
 
 	Subscribe(channels ...string) *redis.PubSub
+	Publish(channel string, message interface{}) int64
 }
