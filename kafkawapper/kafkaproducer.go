@@ -8,32 +8,43 @@ import (
 	//cluster "github.com/bsm/sarama-cluster"
 )
 
-type KafkaProducerProxy struct {
-	Producer *sarama.SyncProducer
-	cb       ComsumerMessageCallback
+type KafkaProducerParam struct {
+	User         string
+	Password     string
+	Server_addrs []string
 }
 
-func (k *KafkaConsumerProxy) SetConsumeCallback(cb ComsumerMessageCallback) {
-	//buxuyao
+//参数分别是  mastername， password， dbindex ，server_addrs
+func (p *KafkaProducerParam) GetCfg() interface{} {
+	return p
 }
-func (k *KafkaProducerProxy) Start(hosts []string, password string, username string, groupid string, topic []string) error {
-	var err error
-	config := cluster.NewConfig()
+
+type KafkaProducerProxy struct {
+	Producer sarama.SyncProducer
+}
+
+func (k *KafkaProducerProxy) Close() error {
+	return k.Producer.Close()
+}
+func (k *KafkaProducerProxy) Start(param *KafkaProducerParam) error {
+	var err error //
+	config := sarama.NewConfig()
 	config.Producer.Retry.Max = 5
 	config.Producer.RequiredAcks = sarama.WaitForLocal        // 发送完数据需要leader和follow都确认
 	config.Producer.Partitioner = sarama.NewRandomPartitioner // 新选出⼀个partition
 	config.Producer.Return.Successes = true                   // 成功交付的消息将在success channel返回
-	if password != "" || username != "" {
+	if param.Password != "" || param.User != "" {
 		// sasl认证
 		config.Net.SASL.Enable = true
-		config.Net.SASL.User = username
-		config.Net.SASL.Password = password
+		config.Net.SASL.User = param.User
+		config.Net.SASL.Password = param.Password
 	}
-	k.Producer, err = sarama.NewSyncProducer(hosts, config)
+	k.Producer, err = sarama.NewSyncProducer(param.Server_addrs, config)
 	if k.Producer == nil {
-		panic(fmt.Sprintf("consumer is nil. kafka info -> {brokers:%v, topic: %v, group: %v}", hosts, topic, groupid))
+		panic(fmt.Sprintf("consumer is nil. kafka info -> {brokers:%v}", param.Server_addrs))
 	}
-	beego.Informational("kafka init success, consumer -> %v, topic -> %v", k.Producer, topic)
+	beego.Informational("kafka init success, err:%v consumer -> %v", err, k.Producer)
+	return err
 }
 
 func (k *KafkaProducerProxy) ProduceMsg(topic string, msg string) error {
@@ -51,9 +62,6 @@ func (k *KafkaProducerProxy) ProduceMsg(topic string, msg string) error {
 		return err
 	}
 	return nil
-
-}
-func (k *KafkaProducerProxy) Loop() {
 
 }
 func (k *KafkaProducerProxy) Stop() error {

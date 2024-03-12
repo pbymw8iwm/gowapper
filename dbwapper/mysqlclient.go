@@ -12,6 +12,21 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type MysqlParam struct {
+	Dbname   string
+	Host     string
+	User     string
+	Password string
+	Port     int
+	RTimeout int32 //读操作超时时间
+	WTimeout int32 //写操作超时时间
+}
+
+//参数分别是  dbname host password port
+func (p *MysqlParam) GetCfg() interface{} {
+	return p
+}
+
 type MysqlClientWapper struct {
 	dborm orm.Ormer
 }

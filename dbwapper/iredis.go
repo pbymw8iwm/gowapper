@@ -6,6 +6,18 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+type RedisCacheParam struct {
+	Mastername   string
+	Password     string
+	Dbindex      int
+	Server_addrs []string
+}
+
+//参数分别是  mastername， password， dbindex ，server_addrs
+func (p *RedisCacheParam) GetCfg() interface{} {
+	return p
+}
+
 // IRedisConnection 是 Redis 连接的抽象接口
 type IRedisClient interface {
 	Connect(param *RedisCacheParam) error
