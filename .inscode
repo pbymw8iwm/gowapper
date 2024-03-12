@@ -1,4 +1,4 @@
-run = "go mod init wapper && go mod tidy && go build"
+run = "go mod init gowapper && go mod tidy && go build"
 entrypoint = "main.go"
 language = "go"
 
