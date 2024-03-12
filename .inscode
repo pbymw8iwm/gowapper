@@ -1,4 +1,4 @@
-run = "make"
+run = "go mod init wapper && go mod tidy && go build"
 entrypoint = "main.go"
 language = "go"
 
